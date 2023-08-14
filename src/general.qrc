@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/general/icons">
+        <file>resource/dark-mode.png</file>
+        <file>resource/settings.png</file>
+    </qresource>
+</RCC>
