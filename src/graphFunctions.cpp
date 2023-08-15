@@ -230,8 +230,14 @@ void MainWindow::on_cbox_Tracer_clicked(bool checked)	//tracer
 {
     if (checked)
     {
-        createChartTracer();
+        // Delete the old tracer if it exists
+            if (phaseTracer != nullptr)
+        {
+            delete phaseTracer;
+            phaseTracer = nullptr;
+        }
 
+        createChartTracer();
         // Connect the mouseMove signal to the on_tracerShowPointValue slot
         connect(ui->Plot, &QCustomPlot::mouseMove, this, &MainWindow::on_tracerShowPointValue);
     }
@@ -239,7 +245,6 @@ void MainWindow::on_cbox_Tracer_clicked(bool checked)	//tracer
     {
         // Disconnect the mouseMove signal from the on_tracerShowPointValue slot
         disconnect(ui->Plot, &QCustomPlot::mouseMove, this, &MainWindow::on_tracerShowPointValue);
-
         delete phaseTracer;
         phaseTracer = nullptr;
     }
@@ -1160,15 +1165,13 @@ void MainWindow::on_comboBox_tracer_currentTextChanged()
     if (ui->cbox_Tracer->isChecked())
     {
         // Check if a tracer is already active
-        if (phaseTracer == nullptr)
+        if (phaseTracer != nullptr)
         {
-            // Create a new tracer
-            createChartTracer();
-            connect(ui->Plot, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(on_tracerShowPointValue(QMouseEvent*)));
+            delete phaseTracer;
+            phaseTracer = nullptr;
         }
-
         createChartTracer();
-
+        connect(ui->Plot, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(on_tracerShowPointValue(QMouseEvent*)));
         ui->Plot->replot();
     }
     else
@@ -1178,6 +1181,8 @@ void MainWindow::on_comboBox_tracer_currentTextChanged()
         {
             // You can hide the tracer by disabling its interactivity
             phaseTracer->setInterpolating(false);
+            delete phaseTracer;
+            phaseTracer = nullptr;
 
             // Call replot to update the chart with the hidden tracer
             ui->Plot->replot();
