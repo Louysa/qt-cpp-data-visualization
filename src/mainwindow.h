@@ -89,7 +89,7 @@ private:
     QStringList fileNames;
 
     //Tracer
-    QCPItemTracer* phaseTracer;
+    QCPItemTracer* phaseTracer = nullptr;
 
     // Plot Image
     QImage image;
